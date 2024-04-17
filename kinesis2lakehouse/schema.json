@@ -1,0 +1,78 @@
+[
+  {
+    "Name": "row",
+    "Type": "bigint",
+    "Comment": ""
+  },
+  {
+    "Name": "period",
+    "Type": "string",
+    "Comment": ""
+  },
+  {
+    "Name": "year",
+    "Type": "int",
+    "Comment": ""
+  },
+  {
+    "Name": "month",
+    "Type": "int",
+    "Comment": ""
+  },
+  {
+    "Name": "business_unit",
+    "Type": "string",
+    "Comment": ""
+  },
+  {
+    "Name": "province_lv1",
+    "Type": "string",
+    "Comment": ""
+  },
+  {
+    "Name": "province_lv2",
+    "Type": "string",
+    "Comment": ""
+  },
+  {
+    "Name": "product_name",
+    "Type": "string",
+    "Comment": ""
+  },
+  {
+    "Name": "brand_lv1",
+    "Type": "string",
+    "Comment": ""
+  },
+  {
+    "Name": "brand_lv2",
+    "Type": "string",
+    "Comment": ""
+  },
+  {
+    "Name": "price_class",
+    "Type": "string",
+    "Comment": ""
+  },
+  {
+    "Name": "qty",
+    "Type": "bigint",
+    "Comment": ""
+  },
+  {
+    "Name": "revenue",
+    "Type": "decimal",
+    "Comment": ""
+  },
+  {
+    "Name": "event_timestamp",
+    "Type": "timestamp",
+    "Comment": ""
+  },
+  {
+    "Name": "kind",
+    "Type": "string",
+    "Comment": "",
+    "PartitionKey": "Partition (15)"
+  }
+]

@@ -15,21 +15,6 @@
     "Comment": ""
   },
   {
-    "Name": "day",
-    "Type": "int",
-    "Comment": ""
-  },
-  {
-    "Name": "year",
-    "Type": "int",
-    "Comment": ""
-  },
-  {
-    "Name": "month",
-    "Type": "int",
-    "Comment": ""
-  },
-  {
     "Name": "business_unit",
     "Type": "string",
     "Comment": ""
@@ -83,5 +68,23 @@
     "Name": "kind",
     "Type": "string",
     "Comment": ""
+  },
+  {
+    "Name": "year",
+    "Type": "int",
+    "Comment": "",
+    "PartitionKey": "Partition (0)"
+  },
+  {
+    "Name": "month",
+    "Type": "int",
+    "Comment": "",
+    "PartitionKey": "Partition (1)"
+  },
+  {
+    "Name": "day",
+    "Type": "int",
+    "Comment": "",
+    "PartitionKey": "Partition (2)"
   }
 ]

@@ -5,8 +5,18 @@
     "Comment": ""
   },
   {
-    "Name": "period",
-    "Type": "string",
+    "Name": "yr",
+    "Type": "int",
+    "Comment": ""
+  },
+  {
+    "Name": "mth",
+    "Type": "int",
+    "Comment": ""
+  },
+  {
+    "Name": "day",
+    "Type": "int",
     "Comment": ""
   },
   {
@@ -61,7 +71,7 @@
   },
   {
     "Name": "revenue",
-    "Type": "decimal",
+    "Type": "bigint",
     "Comment": ""
   },
   {
@@ -72,7 +82,6 @@
   {
     "Name": "kind",
     "Type": "string",
-    "Comment": "",
-    "PartitionKey": "Partition (15)"
+    "Comment": ""
   }
 ]

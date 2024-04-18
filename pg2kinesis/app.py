@@ -3,7 +3,7 @@ import sys
 import psycopg2
 import boto3
 import yaml
-from datetime import datetime
+import datetime
 from psycopg2.extras import LogicalReplicationConnection
 
 with open("config.yml", "r") as stream:
@@ -33,6 +33,7 @@ class Consumer:
             pass
         else:
             for changeData in jsonPayload:
+                currentTime = datetime.datetime.now()
                 if changeData['kind'] == 'delete':
                     columnnames = changeData['oldkeys']['keynames']
                     columnvalues = changeData['oldkeys']['keyvalues']
@@ -40,9 +41,11 @@ class Consumer:
                     columnnames = changeData['columnnames']
                     columnvalues = changeData['columnvalues']
                 processedData = {k : v for k, v in zip(columnnames, columnvalues)}
-                processedData["event_timestamp"] = str(datetime.now())
+                processedData["event_timestamp"] = str(currentTime)
+                processedData['yr'] = currentTime.year
+                processedData['mth'] = currentTime.month
+                processedData['day'] = currentTime.day
                 processedData['kind'] = changeData['kind']
-                processedData['schema'] = changeData['schema']
                 processedData['table'] = changeData['table']
                 print(f"Data: {processedData}")
                 print("Put one record to Kinesis...\n")

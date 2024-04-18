@@ -27,7 +27,6 @@ kinesis_client = boto3.client(
 class Consumer:
     def __call__(self, msg):
         jsonPayload = json.loads(msg.payload)['change']
-        print(json.loads(msg.payload))
         if not jsonPayload:
             print("Nothing changed, skip this message!\n")
             pass

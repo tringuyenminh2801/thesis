@@ -11,6 +11,10 @@ with open("config.yml", "r") as stream:
         config = yaml.safe_load(stream=stream)
     except yaml.YAMLError as yamlErr:
         print(yamlErr)
+        
+# SETUP CONFIGURATION
+dbConfig = config['instances']['pg']
+repluserConfig = config['pg2kinesis']['repluser']
 kinesisConfig = config['pg2kinesis']['kinesis']
 
 stream_name = kinesisConfig['stream_name']
@@ -37,9 +41,7 @@ def consume(msg):
             #kinesis_client.put_record(StreamName=stream_name, Data=json.dumps(processedData), PartitionKey="default")
 
 def main():
-    # SETUP CONFIGURATION
-    dbConfig = config['instances']['pg']
-    repluserConfig = config['pg2kinesis']['repluser']
+    global dbConfig, repluserConfig
     # ESTABLISH SSH CONNECTION
     try:
         my_connection  = psycopg2.connect(

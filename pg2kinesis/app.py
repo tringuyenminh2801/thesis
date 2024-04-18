@@ -41,9 +41,6 @@ class Consumer:
                     columnvalues = changeData['columnvalues']
                 processedData = {k : v for k, v in zip(columnnames, columnvalues)}
                 processedData["event_timestamp"] = str(currentTime)
-                processedData['yr'] = currentTime.year
-                processedData['mth'] = currentTime.month
-                processedData['day'] = currentTime.day
                 processedData['kind'] = changeData['kind']
                 processedData['table'] = changeData['table']
                 print(f"Data: {processedData}")

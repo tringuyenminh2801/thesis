@@ -55,13 +55,13 @@ def main():
     print("SUCCESS: Connection to RDS for PostgreSQL instance succeeded")
     cur = my_connection.cursor()
     try:
-        cur.create_replication_slot('wal2json_test_slot', output_plugin = 'wal2json')
+        cur.create_replication_slot('cdc', output_plugin = 'wal2json')
     except:
         print("Replication slot exists!")
-        cur.drop_replication_slot('wal2json_test_slot')
-        cur.create_replication_slot('wal2json_test_slot', output_plugin = 'wal2json')
+        cur.drop_replication_slot('cdc')
+        cur.create_replication_slot('cdc', output_plugin = 'wal2json')
     finally:
-        cur.start_replication(slot_name = 'wal2json_test_slot', options = {'pretty-print' : 1}, decode= True)
+        cur.start_replication(slot_name = 'cdc', options = {'pretty-print' : 1}, decode= True)
         cur.consume_stream(consume=consume)
 
 if __name__ == "__main__":

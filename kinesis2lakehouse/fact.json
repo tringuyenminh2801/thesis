@@ -1,0 +1,42 @@
+[
+  {
+    "Name": "id",
+    "Type": "int",
+    "Comment": ""
+  },
+  {
+    "Name": "product_id",
+    "Type": "int",
+    "Comment": ""
+  },
+  {
+    "Name": "bu_id",
+    "Type": "int",
+    "Comment": ""
+  },
+  {
+    "Name": "year",
+    "Type": "int",
+    "Comment": ""
+  },
+  {
+    "Name": "month",
+    "Type": "int",
+    "Comment": ""
+  },
+  {
+    "Name": "qty",
+    "Type": "int",
+    "Comment": ""
+  },
+  {
+    "Name": "revenue",
+    "Type": "bigint",
+    "Comment": ""
+  },
+  {
+    "Name": "event_timestamp",
+    "Type": "timestamp",
+    "Comment": ""
+  }
+]

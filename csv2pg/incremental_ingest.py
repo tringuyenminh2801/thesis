@@ -20,11 +20,13 @@ def main():
             config = yaml.safe_load(stream=stream)
         except yaml.YAMLError as yamlErr:
             print(yamlErr)
+            
     # SETUP CONFIGURATION
     ec2Config = config['instances']['ec2']
     dbConfig = config['instances']['pg']
     srcConfig = config['csv2pg']['incremental_src']
     tgtConfig = config['csv2pg']['tgt']
+    
     # ESTABLISH SSH CONNECTION
     with sshtunnel.SSHTunnelForwarder(
         (ec2Config['host']),
@@ -59,7 +61,7 @@ def main():
                     if_exists="append"
                 )
                 stop = time()
-                print(f"Insert chunk, took {stop - start:.3f}")
+                print(f"Insert one row to {tgtConfig['schema']}.{tgtConfig['table']}, took {stop - start:.3f} seconds")
                 sleep(1)
             except StopIteration:
                 print(

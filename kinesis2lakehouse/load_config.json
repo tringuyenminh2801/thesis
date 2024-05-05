@@ -1,5 +1,0 @@
-{
-    "schema" : ["sales", "sales", "sales"],
-    "tableName" : ["d_bu", "d_product", "f_sales"],
-    "lastRead" : [0, 0, 0]
-}

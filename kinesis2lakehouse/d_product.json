@@ -1,0 +1,52 @@
+[
+    {
+      "Name": "id",
+      "Type": "int",
+      "Comment": "",
+      "Parameters": {
+        "iceberg.field.current": "true",
+        "iceberg.field.id": "1",
+        "iceberg.field.optional": "true"
+      }
+    },
+    {
+      "Name": "product_name",
+      "Type": "string",
+      "Comment": "",
+      "Parameters": {
+        "iceberg.field.current": "true",
+        "iceberg.field.id": "2",
+        "iceberg.field.optional": "true"
+      }
+    },
+    {
+      "Name": "price_class",
+      "Type": "string",
+      "Comment": "",
+      "Parameters": {
+        "iceberg.field.current": "true",
+        "iceberg.field.id": "3",
+        "iceberg.field.optional": "true"
+      }
+    },
+    {
+      "Name": "brand_lv1",
+      "Type": "string",
+      "Comment": "",
+      "Parameters": {
+        "iceberg.field.current": "true",
+        "iceberg.field.id": "4",
+        "iceberg.field.optional": "true"
+      }
+    },
+    {
+      "Name": "brand_lv2",
+      "Type": "string",
+      "Comment": "",
+      "Parameters": {
+        "iceberg.field.current": "true",
+        "iceberg.field.id": "5",
+        "iceberg.field.optional": "true"
+      }
+    }
+  ]

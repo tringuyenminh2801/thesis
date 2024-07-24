@@ -1,6 +1,9 @@
-# SETUP EC2 AND POSTGRES
+# INITIAL STEPS
 
-Make sure that your RDS database is private and you can SSH to the EC2 publicly via port 22.
+1. Make sure that your RDS database is private and you can SSH to the EC2 publicly via port 22.
+2. Create a custom parameter group for your Postgres database, set the `rds.logical_replication` setting to 1. Detail for setup CDC for Postgres visit [here](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.Replication.Logical.html)
+
+# SETUP EC2 AND POSTGRES
 
 1. Update
 ```bash
@@ -40,6 +43,15 @@ create publication cdc for all tables;
 ```sql
 alter table table_name replica identity full;
 ```
+# SETUP LAKEHOUSE IN S3
+
+Create the following folders:
+1. raw - to store raw data from Kinesis Data Firehose
+2. silver - to store transformed data
+3. config - to hold the "Last query date" file, where we use it for delta load. See Delta load definition [here](https://dataengineering.wiki/Concepts/Delta+Load)
+
+After creating these folders, add the file [load_config.json](/kinesis2lakehouse/load_config.json) to the folder "config".
+
 
 # INGESTION CODE
 Ingestion code can be found [here](/csv2pg/)

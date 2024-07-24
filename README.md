@@ -2,6 +2,7 @@
 
 ## INTRODUCTION
 In an era dominated by the relentless growth of Big Data, enterprises find themselves at the crossroads of a pivotal challenge – the efficient management and extraction of meaningful insights from expansive and diverse datasets. As organizations grapple with this monumental task, the demand for innovative strategies becomes imperative. This thesis undertakes an investigation of a hybrid methodology, skillfully merging the advantages of data lakes and data warehouses into a revolutionary structure called a data lakehouse architecture. This endeavor aims to furnish businesses with a comprehensive guide to constructing a robust and scalable data warehouse, empowered by the dynamic capabilities of Amazon Web Services (AWS).
+
 ### Data Architecture: 
 ![Data Architecture](/assets/images/data_architecture.png)
 1. The operation running on EC2 sends data to RDS 24/7. To mimic their business, Python script is used to write CSV file data to RDS by accessing EC2 via Secure Shell (SSH) and connect EC2 with RDS via PSQL.

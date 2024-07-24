@@ -162,7 +162,3 @@ cython_debug/
 pgadmin_storage/*
 local_postgres_data/*
 dtype_mapping/*
-data/*
-steps.md
-config.yml
-test.yml

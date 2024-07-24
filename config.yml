@@ -1,0 +1,48 @@
+instances:
+  ec2:
+    pemkey_path: "absolute-path-of-pemkey-for-ec2"
+    host: ec2-hostname.compute.amazonaws.com
+    port: 22
+    username: ec2-user
+
+  pg:
+    dbtype: postgresql
+    dbname: dbname
+    host: rds-hostname.rds.amazonaws.com
+    bind_server: 127.0.0.1
+    port: 5432
+    username: username
+    password: password
+    engine: sqlalchemy
+
+csv2pg:
+  src:
+    name: FRT Data
+    type: csv
+    path: data/frt_init.csv
+    dtype_mapping_path: relative-path-of-datatype-mapping
+
+  incremental_src:
+    name: FRT Data
+    type: csv
+    path: data/frt_incremental.csv
+    dtype_mapping_path: relative-path-of-datatype-mapping
+
+  tgt:
+    name: AWS RDS
+    dbtype: PostgreSQL
+    schema: schema
+    table: tablename
+
+pg2kinesis:
+  kinesis:
+    stream_name: kinesis-stream-name
+    region_name: aws-region-name
+    credentials:
+      aws_access_key_id: aws_access_key_id
+      aws_secret_access_key: aws_secret_access_key
+  repluser:
+    username: replication-username
+    password: replication-password
+
+

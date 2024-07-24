@@ -1,0 +1,42 @@
+[
+  {
+    "Name": "id",
+    "Type": "int",
+    "Comment": "",
+    "Parameters": {
+      "iceberg.field.current": "true",
+      "iceberg.field.id": "1",
+      "iceberg.field.optional": "true"
+    }
+  },
+  {
+    "Name": "business_unit",
+    "Type": "string",
+    "Comment": "",
+    "Parameters": {
+      "iceberg.field.current": "true",
+      "iceberg.field.id": "2",
+      "iceberg.field.optional": "true"
+    }
+  },
+  {
+    "Name": "province_lv1",
+    "Type": "string",
+    "Comment": "",
+    "Parameters": {
+      "iceberg.field.current": "true",
+      "iceberg.field.id": "3",
+      "iceberg.field.optional": "true"
+    }
+  },
+  {
+    "Name": "province_lv2",
+    "Type": "string",
+    "Comment": "",
+    "Parameters": {
+      "iceberg.field.current": "true",
+      "iceberg.field.id": "4",
+      "iceberg.field.optional": "true"
+    }
+  }
+]

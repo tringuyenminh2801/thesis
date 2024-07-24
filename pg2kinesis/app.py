@@ -42,7 +42,7 @@ class Consumer:
                 processedData = {k : v for k, v in zip(columnnames, columnvalues)}
                 processedData['yr'] = processedData.pop('year')
                 processedData['mth'] = processedData.pop('month')
-                processedData["event_timestamp"] = currentTime
+                processedData["event_timestamp"] = int(round(currentTime.timestamp()))
                 processedData['kind'] = changeData['kind']
                 processedData['table'] = changeData['table']
                 print(f"Data: {processedData}")

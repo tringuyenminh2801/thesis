@@ -12,7 +12,6 @@ def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFra
         frame.toDF().createOrReplaceTempView(alias)
     result = spark.sql(query)
     return DynamicFrame.fromDF(result, glueContext, transformation_ctx)
-
 args = getResolvedOptions(sys.argv, ['JOB_NAME'])
 sc = SparkContext()
 glueContext = GlueContext(sc)
@@ -20,51 +19,21 @@ spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
-# Script generated for node TGT DIM PRODUCT
-df_tgt = glueContext.create_data_frame.from_catalog(
-    database="thesis", 
-    table_name="d_product"
-)
-dynf_tgt = DynamicFrame.fromDF(
-    df_tgt, 
-    glueContext, 
-    "TGTDIMPRODUCT_node1713692311534"
-)
+# Script generated for node RAW JSON
+RAWJSON_node1721757499754 = glueContext.create_dynamic_frame.from_options(format_options={"multiline": False}, connection_type="s3", format="json", connection_options={"paths": ["s3://trinm-lakehouse/raw/sales/"], "recurse": True}, transformation_ctx="RAWJSON_node1721757499754")
 
-# Script generated for node Amazon S3
-dynf_src_raw = glueContext.create_dynamic_frame.from_options(
-    format_options={"multiline": False}, 
-    connection_type="s3", 
-    format="json", 
-    connection_options={
-        "paths": ["s3://trinm-lakehouse/raw/sales/"], 
-        "recurse": True
-    }
-)
+# Script generated for node TGT DIM PRODUCT
+TGTDIMPRODUCT_node1721757531703_df = glueContext.create_data_frame.from_catalog(database="thesis", table_name="d_product")
+TGTDIMPRODUCT_node1721757531703 = DynamicFrame.fromDF(TGTDIMPRODUCT_node1721757531703_df, glueContext, "TGTDIMPRODUCT_node1721757531703")
 
 # Script generated for node Last Query Time
-dynf_lstQ = glueContext.create_dynamic_frame.from_options(
-    format_options={"multiline": False}, 
-    connection_type="s3",
-    format="json", 
-    connection_options={
-        "paths": ["s3://trinm-lakehouse/config/load_config.json"], 
-        "recurse": True
-    }
-)
+LastQueryTime_node1721757547827 = glueContext.create_dynamic_frame.from_options(format_options={"multiline": False}, connection_type="s3", format="json", connection_options={"paths": ["s3://trinm-lakehouse/config/load_config.json"], "recurse": True}, transformation_ctx="LastQueryTime_node1721757547827")
 
 # Script generated for node Renamed keys for Join
-dynf_tgt_renamed = ApplyMapping.apply(
-    frame=dynf_tgt, 
-    mappings=[("id", "int", "id", "int"), 
-              ("product_name", "string", "right_product_name", "string"), 
-              ("price_class", "string", "right_price_class", "string"), 
-              ("brand_lv1", "string", "right_brand_lv1", "string"), 
-              ("brand_lv2", "string", "right_brand_lv2", "string")], 
-    transformation_ctx="RenamedkeysforJoin_node1713692723455")
+RenamedkeysforJoin_node1721757578621 = ApplyMapping.apply(frame=TGTDIMPRODUCT_node1721757531703, mappings=[("id", "int", "id", "int"), ("product_name", "string", "right_product_name", "string"), ("price_class", "string", "right_price_class", "string"), ("brand_lv1", "string", "right_brand_lv1", "string"), ("brand_lv2", "string", "right_brand_lv2", "string")], transformation_ctx="RenamedkeysforJoin_node1721757578621")
 
 # Script generated for node Delta Load
-SqlQuery1 = '''
+SqlQuery0 = '''
 select distinct
     product_name,
     price_class,
@@ -80,32 +49,15 @@ where
             lstQ
     )
 '''
-dynf_dltload_src = sparkSqlQuery(
-    glueContext, 
-    query = SqlQuery1, 
-    mapping = {
-        "myDataSource" : dynf_src_raw, 
-        "lstQ":dynf_lstQ
-    }
-)
+DeltaLoad_node1721757622973 = sparkSqlQuery(glueContext, query = SqlQuery0, mapping = {"myDataSource":RAWJSON_node1721757499754, "lstQ":LastQueryTime_node1721757547827}, transformation_ctx = "DeltaLoad_node1721757622973")
 
 # Script generated for node Join
-df_dltload_src = dynf_dltload_src.toDF()
-df_forjoin = dynf_tgt_renamed.toDF()
-df_join = DynamicFrame.fromDF(
-    df_dltload_src.join(
-        df_forjoin, 
-        (df_dltload_src['product_name'] == df_forjoin['right_product_name']) 
-        & (df_dltload_src['price_class'] == df_forjoin['right_price_class']) 
-        & (df_dltload_src['brand_lv1'] == df_forjoin['right_brand_lv1']) 
-        & (df_dltload_src['brand_lv2'] == df_forjoin['right_brand_lv2']), 
-        "leftanti"
-    ), 
-    glueContext
-)
+DeltaLoad_node1721757622973DF = DeltaLoad_node1721757622973.toDF()
+RenamedkeysforJoin_node1721757578621DF = RenamedkeysforJoin_node1721757578621.toDF()
+Join_node1721757661298 = DynamicFrame.fromDF(DeltaLoad_node1721757622973DF.join(RenamedkeysforJoin_node1721757578621DF, (DeltaLoad_node1721757622973DF['product_name'] == RenamedkeysforJoin_node1721757578621DF['right_product_name']) & (DeltaLoad_node1721757622973DF['price_class'] == RenamedkeysforJoin_node1721757578621DF['right_price_class']) & (DeltaLoad_node1721757622973DF['brand_lv1'] == RenamedkeysforJoin_node1721757578621DF['right_brand_lv1']) & (DeltaLoad_node1721757622973DF['brand_lv2'] == RenamedkeysforJoin_node1721757578621DF['right_brand_lv2']), "leftanti"), glueContext, "Join_node1721757661298")
 
 # Script generated for node Get data with incremental ID
-genIDQuery = '''
+SqlQuery1 = '''
 select
     ROW_NUMBER() OVER (
         ORDER BY
@@ -123,17 +75,10 @@ select
 from
     src
 '''
-df_genID = sparkSqlQuery(
-    glueContext, 
-    query = genIDQuery, 
-    mapping = {
-        "src" : df_join, 
-        "mid" : dynf_tgt
-    }
-)
+GetdatawithincrementalID_node1721757723949 = sparkSqlQuery(glueContext, query = SqlQuery1, mapping = {"src":Join_node1721757661298, "mid":TGTDIMPRODUCT_node1721757531703}, transformation_ctx = "GetdatawithincrementalID_node1721757723949")
 
 # Script generated for node AWS Glue Data Catalog
-AWSGlueDataCatalog_node1713692901617_df = df_genID.toDF()
-AWSGlueDataCatalog_node1713692901617 = glueContext.write_data_frame.from_catalog(frame=AWSGlueDataCatalog_node1713692901617_df, database="thesis", table_name="d_product", additional_options={})
+AWSGlueDataCatalog_node1721757749399_df = GetdatawithincrementalID_node1721757723949.toDF()
+AWSGlueDataCatalog_node1721757749399 = glueContext.write_data_frame.from_catalog(frame=AWSGlueDataCatalog_node1721757749399_df, database="thesis", table_name="d_product", additional_options={})
 
 job.commit()

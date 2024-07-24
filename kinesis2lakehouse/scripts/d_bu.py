@@ -7,14 +7,11 @@ from awsglue.job import Job
 from awsglue.dynamicframe import DynamicFrame
 from awsglue import DynamicFrame
 
-
 def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFrame:
     for alias, frame in mapping.items():
         frame.toDF().createOrReplaceTempView(alias)
     result = spark.sql(query)
     return DynamicFrame.fromDF(result, glueContext, transformation_ctx)
-
-
 args = getResolvedOptions(sys.argv, ['JOB_NAME'])
 sc = SparkContext()
 glueContext = GlueContext(sc)
@@ -22,47 +19,21 @@ spark = glueContext.spark_session
 job = Job(glueContext)
 job.init(args['JOB_NAME'], args)
 
+# Script generated for node Get Last Query Time
+GetLastQueryTime_node1721756802200 = glueContext.create_dynamic_frame.from_options(format_options={"multiline": False}, connection_type="s3", format="json", connection_options={"paths": ["s3://trinm-lakehouse/config/load_config.json"], "recurse": True}, transformation_ctx="GetLastQueryTime_node1721756802200")
+
 # Script generated for node TGT DIM BU
-df_tgt = glueContext.create_data_frame.from_catalog(
-    database="thesis", table_name="d_bu")
-dynf_tgt = DynamicFrame.fromDF(
-    df_tgt, glueContext, "dynf_tgt_dimbu")
+TGTDIMBU_node1721756647233_df = glueContext.create_data_frame.from_catalog(database="thesis", table_name="d_bu")
+TGTDIMBU_node1721756647233 = DynamicFrame.fromDF(TGTDIMBU_node1721756647233_df, glueContext, "TGTDIMBU_node1721756647233")
 
-# Script generated for node Amazon S3
-df_src = glueContext.create_data_frame.from_options(
-    format_options={"multiline": False},
-    connection_type="s3",
-    format="json",
-    connection_options={
-        "paths": ["s3://trinm-lakehouse/raw/sales/"],
-        "recurse": True
-    },
-    transformation_ctx="dynf_src"
-)
+# Script generated for node RAW JSON
+RAWJSON_node1721756555732 = glueContext.create_dynamic_frame.from_options(format_options={"multiline": False}, connection_type="s3", format="json", connection_options={"paths": ["s3://trinm-lakehouse/raw/sales/"], "recurse": True}, transformation_ctx="RAWJSON_node1721756555732")
 
-
-# Get Last Query Time
-df_lstQ = glueContext.create_dynamic_frame.from_options(
-    format_options={"multiline": False},
-    connection_type="s3",
-    format="json",
-    connection_options={
-        "paths": ["s3://trinm-lakehouse/config/load_config.json"],
-        "recurse": True
-    },
-    transformation_ctx="dynf_lstQ")
-
-# Rename for joining
-dynf_renamed_tgt_dimbu = ApplyMapping.apply(
-    frame=dynf_tgt,
-    mappings=[("id", "int", "id", "int"),
-              ("business_unit", "string", "right_business_unit", "string"),
-              ("province_lv1", "string", "right_province_lv1", "string"),
-              ("province_lv2", "string", "right_province_lv2", "string")],
-    transformation_ctx="dynf_renamed_tgt_dimbu")
+# Script generated for node Rename for joining
+Renameforjoining_node1721756915783 = ApplyMapping.apply(frame=TGTDIMBU_node1721756647233, mappings=[("id", "int", "id", "int"), ("business_unit", "string", "right_business_unit", "string"), ("province_lv1", "string", "right_province_lv1", "string"), ("province_lv2", "string", "right_province_lv2", "string")], transformation_ctx="Renameforjoining_node1721756915783")
 
 # Script generated for node Delta Load
-SqlQuery4 = '''
+SqlQuery1 = '''
 select distinct
     business_unit,
     province_lv1,
@@ -77,24 +48,15 @@ where
             lstQ
     )
 '''
-dynf_deltaLoad = sparkSqlQuery(
-    glueContext,
-    query=SqlQuery4,
-    mapping={
-        "myDataSource": df_src,
-        "lstQ": df_lstQ
-    },
-    transformation_ctx="dynf_deltaLoad")
+DeltaLoad_node1721756985549 = sparkSqlQuery(glueContext, query = SqlQuery1, mapping = {"myDataSource":RAWJSON_node1721756555732, "lstQ":GetLastQueryTime_node1721756802200}, transformation_ctx = "DeltaLoad_node1721756985549")
 
 # Script generated for node Get new data
-df_deltaLoad = dynf_deltaLoad.toDF()
-dynf_renamed_tgt_dimbu = dynf_renamed_tgt_dimbu.toDF()
-dynf_newDimRecord = DynamicFrame.fromDF(
-    df_deltaLoad.join(dynf_renamed_tgt_dimbu, (df_deltaLoad['business_unit'] == dynf_renamed_tgt_dimbu['right_business_unit']) & (
-        df_deltaLoad['province_lv1'] == dynf_renamed_tgt_dimbu['right_province_lv1']) & (df_deltaLoad['province_lv2'] == dynf_renamed_tgt_dimbu['right_province_lv2']), "leftanti"), glueContext, "dynf_newDimRecord")
+DeltaLoad_node1721756985549DF = DeltaLoad_node1721756985549.toDF()
+Renameforjoining_node1721756915783DF = Renameforjoining_node1721756915783.toDF()
+Getnewdata_node1721757070046 = DynamicFrame.fromDF(DeltaLoad_node1721756985549DF.join(Renameforjoining_node1721756915783DF, (DeltaLoad_node1721756985549DF['business_unit'] == Renameforjoining_node1721756915783DF['right_business_unit']) & (DeltaLoad_node1721756985549DF['province_lv1'] == Renameforjoining_node1721756915783DF['right_province_lv1']) & (DeltaLoad_node1721756985549DF['province_lv2'] == Renameforjoining_node1721756915783DF['right_province_lv2']), "leftanti"), glueContext, "Getnewdata_node1721757070046")
 
 # Script generated for node Generate ID
-SqlQuery3 = '''
+SqlQuery0 = '''
 select
     ROW_NUMBER() OVER (
         ORDER BY
@@ -111,21 +73,10 @@ select
 from
     src
 '''
-dynf_genID = sparkSqlQuery(
-    glueContext, 
-    query=SqlQuery3, 
-    mapping={
-        "src" : dynf_newDimRecord, 
-        "mid" : dynf_tgt
-    }, 
-    transformation_ctx="dynf_genID")
+GenerateID_node1721757171341 = sparkSqlQuery(glueContext, query = SqlQuery0, mapping = {"src":Getnewdata_node1721757070046, "mid":TGTDIMBU_node1721756647233}, transformation_ctx = "GenerateID_node1721757171341")
 
 # Script generated for node AWS Glue Data Catalog
-AWSGlueDataCatalog_node1713692901617 = glueContext.write_data_frame.from_catalog(
-    frame=dynf_genID.toDF(), 
-    database="thesis", 
-    table_name="d_bu", 
-    additional_options={}
-)
+AWSGlueDataCatalog_node1721757232485_df = GenerateID_node1721757171341.toDF()
+AWSGlueDataCatalog_node1721757232485 = glueContext.write_data_frame.from_catalog(frame=AWSGlueDataCatalog_node1721757232485_df, database="thesis", table_name="d_bu", additional_options={})
 
 job.commit()
